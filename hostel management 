@@ -1,0 +1,124 @@
+CREATE DATABASE HostelManagementSystem;
+USE HostelManagementSystem;
+
+CREATE TABLE Admin(
+    AdminID INT AUTO_INCREMENT PRIMARY KEY,
+    FullName VARCHAR(100) NOT NULL,
+    Email VARCHAR(100) UNIQUE NOT NULL,
+    Password VARCHAR(255) NOT NULL,
+    Phone VARCHAR(15)
+);
+
+CREATE TABLE Hostel(
+    HostelID INT AUTO_INCREMENT PRIMARY KEY,
+    HostelName VARCHAR(100) NOT NULL,
+    BlockName VARCHAR(50),
+    TotalRooms INT
+);
+
+CREATE TABLE Room(
+    RoomID INT AUTO_INCREMENT PRIMARY KEY,
+    HostelID INT,
+    RoomNumber VARCHAR(20) UNIQUE,
+    RoomType VARCHAR(30),
+    Capacity INT,
+    AvailableBeds INT,
+    FOREIGN KEY (HostelID) REFERENCES Hostel(HostelID)
+);
+
+CREATE TABLE Student(
+    StudentID INT AUTO_INCREMENT PRIMARY KEY,
+    RegistrationNo VARCHAR(30) UNIQUE,
+    FullName VARCHAR(100),
+    Gender VARCHAR(10),
+    DOB DATE,
+    Email VARCHAR(100),
+    Phone VARCHAR(15),
+    Address TEXT,
+    Course VARCHAR(100),
+    Year INT,
+    GuardianName VARCHAR(100),
+    GuardianPhone VARCHAR(15)
+);
+
+CREATE TABLE RoomAllocation(
+    AllocationID INT AUTO_INCREMENT PRIMARY KEY,
+    StudentID INT,
+    RoomID INT,
+    AllocationDate DATE,
+    Status VARCHAR(20),
+    FOREIGN KEY(StudentID) REFERENCES Student(StudentID),
+    FOREIGN KEY(RoomID) REFERENCES Room(RoomID)
+);
+
+CREATE TABLE FeeStructure(
+    FeeID INT AUTO_INCREMENT PRIMARY KEY,
+    RoomType VARCHAR(30),
+    Amount DECIMAL(10,2)
+);
+
+CREATE TABLE FeePayment(
+    PaymentID INT AUTO_INCREMENT PRIMARY KEY,
+    StudentID INT,
+    FeeID INT,
+    AmountPaid DECIMAL(10,2),
+    PaymentDate DATE,
+    PaymentMode VARCHAR(30),
+    Status VARCHAR(20),
+    FOREIGN KEY(StudentID) REFERENCES Student(StudentID),
+    FOREIGN KEY(FeeID) REFERENCES FeeStructure(FeeID)
+);
+
+CREATE TABLE Attendance(
+    AttendanceID INT AUTO_INCREMENT PRIMARY KEY,
+    StudentID INT,
+    AttendanceDate DATE,
+    Status VARCHAR(20),
+    FOREIGN KEY(StudentID) REFERENCES Student(StudentID)
+);
+
+CREATE TABLE Visitor(
+    VisitorID INT AUTO_INCREMENT PRIMARY KEY,
+    StudentID INT,
+    VisitorName VARCHAR(100),
+    RelationName VARCHAR(50),
+    VisitDate DATE,
+    InTime TIME,
+    OutTime TIME,
+    FOREIGN KEY(StudentID) REFERENCES Student(StudentID)
+);
+
+CREATE TABLE Complaint(
+    ComplaintID INT AUTO_INCREMENT PRIMARY KEY,
+    StudentID INT,
+    ComplaintType VARCHAR(100),
+    Description TEXT,
+    ComplaintDate DATE,
+    Status VARCHAR(30),
+    FOREIGN KEY(StudentID) REFERENCES Student(StudentID)
+);
+
+CREATE TABLE Staff(
+    StaffID INT AUTO_INCREMENT PRIMARY KEY,
+    FullName VARCHAR(100),
+    Designation VARCHAR(50),
+    Phone VARCHAR(15),
+    Email VARCHAR(100)
+);
+
+CREATE TABLE LeaveRequest(
+    LeaveID INT AUTO_INCREMENT PRIMARY KEY,
+    StudentID INT,
+    FromDate DATE,
+    ToDate DATE,
+    Reason TEXT,
+    Status VARCHAR(20),
+    FOREIGN KEY(StudentID) REFERENCES Student(StudentID)
+);
+
+CREATE TABLE Notice(
+    NoticeID INT AUTO_INCREMENT PRIMARY KEY,
+    Title VARCHAR(200),
+    Description TEXT,
+    PublishDate DATE
+);
